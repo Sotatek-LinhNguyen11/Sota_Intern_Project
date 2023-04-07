@@ -1,7 +1,13 @@
-import { IsString, IsEmail, IsNumber, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  MinLength,
+  IsNumber,
+  IsNotEmpty,
+} from 'class-validator';
 import { Expose, Transform } from 'class-transformer';
 
-export class UserDto {
+export class SignUpUserDto {
   @Expose()
   @IsString()
   @Transform(({ value }) => value.trim())
@@ -17,18 +23,12 @@ export class UserDto {
   @Transform(({ value }) => parseInt(value))
   age: number;
 
-  @Expose()
   @IsEmail()
   @IsNotEmpty()
   username: string;
 
-  @Expose()
   @IsString()
-  @Transform(({ value }) => value.trim())
-  interest: string;
-
-  @Expose()
-  @IsString()
-  @Transform(({ value }) => value.trim())
-  description: string;
+  @IsNotEmpty()
+  @MinLength(8)
+  password: string;
 }

@@ -34,27 +34,4 @@ export class ArticleRepository {
     Object.assign(article, updateData);
     return await this.repository.save(article);
   }
-
-  async findOneByIdAndAuthorId(
-    id: number,
-    authorid: number,
-  ): Promise<ArticleEntity> {
-    return this.repository.findOne({
-      where: { id, id: { id: authorid } },
-    });
-  }
-
-  async save(article: Article): Promise<Article> {
-    return this.articleRepository.save(article);
-  }
-
-  async delete(id: number, authorId: number): Promise<void> {
-    const result = await this.articleRepository.delete({
-      id,
-      author: { id: authorId },
-    });
-    if (result.affected === 0) {
-      throw new NotFoundException(`Article with ID ${id} not found`);
-    }
-  }
 }

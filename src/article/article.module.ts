@@ -3,6 +3,7 @@ import { ArticleController } from './controller/article.controller';
 import { ArticleService } from './service/article.service';
 import { ArticleEntity } from './entity/article.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ArticleRepository } from './repository/article.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ArticleEntity])],

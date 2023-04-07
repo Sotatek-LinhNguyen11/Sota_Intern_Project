@@ -6,6 +6,8 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user/entity/user.entity';
 import { ArticleEntity } from './article/entity/article.entity';
+import { AuthModule } from './auth/auth.module';
+import { CaslModule } from './casl/casl.module';
 // Giai thich tai soa can co decorator Global ???
 @Global()
 @Module({
@@ -25,6 +27,8 @@ import { ArticleEntity } from './article/entity/article.entity';
       entities: [UserEntity, ArticleEntity],
       synchronize: true,
     }),
+    AuthModule,
+    CaslModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -10,7 +10,7 @@ enum ArticleGenre {
   name: 'article',
 })
 export class ArticleEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ nullable: false })
@@ -19,7 +19,7 @@ export class ArticleEntity {
   @Column({
     type: 'enum',
     enum: ArticleGenre,
-    default: 'literature',
+    default: ArticleGenre.literature,
     nullable: false,
   })
   topic: ArticleGenre;
