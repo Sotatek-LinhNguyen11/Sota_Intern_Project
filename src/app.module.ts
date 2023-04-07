@@ -1,13 +1,12 @@
 import { Global, Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArticleModule } from './article/article.module';
-import { UserModule } from './user/user.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './user/entity/user.entity';
 import { ArticleEntity } from './article/entity/article.entity';
 import { AuthModule } from './auth/auth.module';
-import { CaslModule } from './casl/casl.module';
+import { UserEntity } from './user/entity/user.entity';
+import { UserModule } from './user/user.module';
 // Giai thich tai soa can co decorator Global ???
 @Global()
 @Module({
@@ -28,7 +27,6 @@ import { CaslModule } from './casl/casl.module';
       synchronize: true,
     }),
     AuthModule,
-    CaslModule,
   ],
   controllers: [AppController],
   providers: [AppService],

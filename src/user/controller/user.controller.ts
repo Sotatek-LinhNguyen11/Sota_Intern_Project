@@ -2,35 +2,24 @@ import {
   Body,
   Controller,
   Get,
-  HttpStatus,
   Param,
-  Post,
   Put,
-  HttpCode,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../service/user.service';
-import { SignUpUserDto } from '../dto/signup.dto';
 import { UserDto } from '../dto/user.dto';
-import { AuthService } from 'src/auth/service/auth.service';
-import { SignIpUserDto } from '../dto/signin_user.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller()
 export class UserController {
-  constructor(
-    private userService: UserService,
-    private authService: AuthService,
-  ) {}
-  @Post('/signup')
-  async signUpUser(@Body() user: SignUpUserDto) {
-    // Trong register minh chi yeu cau nhan vao name, age, address, username, password
-    await this.userService.signUpUser(user);
-  }
+  constructor(private userService: UserService) {}
+  // @Post('/signup')
+  // async signUpUser(@Body() user: SignUpUserDto) {
+  //   // Trong register minh chi yeu cau nhan vao name, age, address, username, password
+  //   await this.userService.signUpUser(user);
+  // }
 
-  @HttpCode(HttpStatus.OK)
-  @Post('/login')
-  signIn(@Body() signInDto: SignIpUserDto) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
-  }
   // Sign In trong User chuyen sang Auth Controller
   // @Post('/signin')
   // async signInUser(@Body() user: Partial<UserDto>) {
@@ -39,15 +28,18 @@ export class UserController {
   //   // If ok -> log: 200, success else log : Error
   // }
 
-  @Get('/users')
+  @Get('/search/users')
   async getUsersByName(@Param('name') name: string): Promise<UserDto[]> {
     return await this.userService.getUsersByName(name);
   }
-  @Put(':id')
-  async updateUser(
-    @Param('id') id: number,
-    @Body() updateData: Partial<UserDto>,
-  ) {
-    await this.userService.updateUser(id, updateData);
+  @UseGuards(AuthGuard)
+  @Put()
+  async updateUser(@Request() req: any, @Body() updateData: Partial<UserDto>) {
+    await this.userService.updateUser(req.user.id, updateData);
+  }
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  getProfile(@Request() req: any) {
+    return req.user;
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserRepository } from '../repository/user.repository';
 import { SignUpUserDto } from '../dto/signup.dto';
 import { plainToInstance } from 'class-transformer';
@@ -9,20 +9,11 @@ import { UserDto } from '../dto/user.dto';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async signUpUser(registerUserDto: SignUpUserDto) {
+  async signUpUser(registerUserDto: SignUpUserDto): Promise<UserEntity> {
     try {
-      const user = await this.userRepository.getUser(
-        registerUserDto.username,
-        registerUserDto.password,
-      );
-      if (user == null) {
-        const saveUser = await this.userRepository.registerUser(
-          registerUserDto,
-        );
-        console.log('Save successfully!', saveUser);
-      } else {
-        console.log('User existed in database!');
-      }
+      const user = await this.getUserByUsername(registerUserDto.username);
+      if (user) throw new BadRequestException('Username existed!');
+      return await this.userRepository.registerUser(registerUserDto);
     } catch (error) {
       throw error;
     }

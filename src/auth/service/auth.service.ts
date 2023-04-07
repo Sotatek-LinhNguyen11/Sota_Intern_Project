@@ -16,12 +16,19 @@ export class AuthService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
     // TODO: Generate a JWT and return it here instead of the user object
-    const payload = { sub: user.id, ...result };
+    const payload = { id: user.id, ...result };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
   async register(signUpUserDto: SignUpUserDto): Promise<any> {
-    const user = await this.userService.signUpUser(signUpUserDto);
+    const saveUser = await this.userService.signUpUser(signUpUserDto);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = saveUser;
+    // TODO: Generate a JWT and return it here instead of the user object
+    const payload = { id: saveUser.id, ...result };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }

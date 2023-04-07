@@ -10,13 +10,8 @@ export class ArticleRepository {
     @InjectRepository(ArticleEntity)
     private readonly repository: Repository<ArticleEntity>,
   ) {}
-  async createArticle(article: ArticleDto): Promise<ArticleEntity> {
-    const saveArticle = await this.repository.create({
-      title: article.title,
-      topic: article.topic,
-      content: article.content,
-    });
-    return await this.repository.save(saveArticle);
+  async createArticle(article: ArticleDto, id: number): Promise<ArticleEntity> {
+    return await this.repository.save({ ...article, user: { id } });
   }
   async getArticlesByName(title: string): Promise<ArticleEntity[]> {
     return await this.repository.find({
@@ -26,6 +21,9 @@ export class ArticleRepository {
     });
   }
 
+  async getArticleById(id: number): Promise<ArticleEntity> {
+    return await this.repository.findOneById(id);
+  }
   async updateArticle(
     id: number,
     updateData: Partial<ArticleDto>,
@@ -33,5 +31,10 @@ export class ArticleRepository {
     const article = await this.repository.findOneById(id);
     Object.assign(article, updateData);
     return await this.repository.save(article);
+  }
+
+  async deleteArticle(id: number): Promise<string> {
+    await this.repository.delete(id);
+    return 'Delete success!';
   }
 }
