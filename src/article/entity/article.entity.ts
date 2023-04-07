@@ -13,7 +13,9 @@ export class ArticleEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
+  @Column({
+    nullable: false,
+  })
   title: string;
 
   @Column({
@@ -24,7 +26,7 @@ export class ArticleEntity {
   })
   topic: ArticleGenre;
 
-  @Column({ nullable: false })
+  @Column()
   content: string;
 
   @ManyToOne(() => UserEntity, (user) => user.articles)

@@ -1,13 +1,11 @@
 import { Module, SetMetadata } from '@nestjs/common';
-import { AuthController } from './controller/auth.controller';
-import { AuthService } from './service/auth.service';
-import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './auth.constants';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/user/entity/user.entity';
-import { AuthGuard } from './auth.guard';
-import { APP_GUARD } from '@nestjs/core';
+import { UserModule } from 'src/user/user.module';
+import { jwtConstants } from './auth.constants';
+import { AuthController } from './controller/auth.controller';
+import { AuthService } from './service/auth.service';
 
 @Module({
   imports: [
@@ -20,14 +18,8 @@ import { APP_GUARD } from '@nestjs/core';
     }),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-  ],
-  exports: [AuthService, AuthGuard],
+  providers: [AuthService],
+  exports: [],
 })
 export class AuthModule {}
 export const IS_PUBLIC_KEY = 'isPublic';

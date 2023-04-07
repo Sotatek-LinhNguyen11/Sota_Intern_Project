@@ -24,7 +24,7 @@ import { UserModule } from './user/user.module';
         ssl: 'true',
       },
       entities: [UserEntity, ArticleEntity],
-      synchronize: true,
+      synchronize: false,
     }),
     AuthModule,
   ],

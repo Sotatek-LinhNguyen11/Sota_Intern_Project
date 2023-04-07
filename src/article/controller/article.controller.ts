@@ -9,15 +9,15 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ArticleService } from '../service/article.service';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { ArticleDto } from '../dto/article.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { ArticleService } from '../service/article.service';
 
 @Controller('article')
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('/create')
   async createArticle(@Body() article: ArticleDto, @Request() req: any) {
     await this.articleService.createArticle(article, req.user.id);
@@ -29,7 +29,7 @@ export class ArticleController {
     return await this.articleService.getArticlesByName(title);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Put('/update/:id')
   async updateArticle(
     @Param('id') id: string,
@@ -43,7 +43,7 @@ export class ArticleController {
     );
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete('/delete/:id')
   async deleteArticle(@Param('id') id: string, @Request() req: any) {
     await this.articleService.deleteArticle(parseInt(id, 10), req.user.id);
