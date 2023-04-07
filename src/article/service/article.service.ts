@@ -8,7 +8,7 @@ export class ArticleService {
   constructor(private readonly articleRepository: ArticleRepository) {}
   async createArticle(_article: ArticleDto, id: number) {
     try {
-      const saveArticle = this.articleRepository.createArticle(_article, id);
+      const saveArticle = await this.articleRepository.createArticle(_article, id);
       console.log('Save successfully!', saveArticle);
     } catch (error) {
       throw error;

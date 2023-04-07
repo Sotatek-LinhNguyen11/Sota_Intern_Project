@@ -22,7 +22,12 @@ export class ArticleRepository {
   }
 
   async getArticleById(id: number): Promise<ArticleEntity> {
-    return await this.repository.findOneById(id);
+    return await this.repository.findOne({
+      relations: ['user'],
+      where: {
+        id: id,
+      },
+    });
   }
   async updateArticle(
     id: number,

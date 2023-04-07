@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UserDto } from '../dto/user.dto';
 import { UserService } from '../service/user.service';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/auth.guard';
 // console.log(AuthGuard);
 
 @Controller()
@@ -21,7 +21,7 @@ export class UserController {
     return await this.userService.getUsersByName(name);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @Put('/update/user')
   async updateUser(@Request() req: any, @Body() updateData: Partial<UserDto>) {
     await this.userService.updateUser(req.user.id, updateData);

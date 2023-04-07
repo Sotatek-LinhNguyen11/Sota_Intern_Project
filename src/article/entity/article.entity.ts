@@ -1,10 +1,10 @@
 import { UserEntity } from 'src/user/entity/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-enum ArticleGenre {
-  'comic',
-  'story',
-  'novel',
-  'literature',
+export enum ArticleGenre {
+  'comic' = 'comic',
+  'story' = 'story',
+  'novel' = 'novel',
+  'literature' = 'literature',
 }
 @Entity({
   name: 'article',
@@ -14,7 +14,7 @@ export class ArticleEntity {
   id: number;
 
   @Column({
-    nullable: false,
+    nullable: true,
   })
   title: string;
 
@@ -22,11 +22,11 @@ export class ArticleEntity {
     type: 'enum',
     enum: ArticleGenre,
     default: ArticleGenre.literature,
-    nullable: false,
+    nullable: true,
   })
   topic: ArticleGenre;
 
-  @Column()
+  @Column({nullable: true})
   content: string;
 
   @ManyToOne(() => UserEntity, (user) => user.articles)

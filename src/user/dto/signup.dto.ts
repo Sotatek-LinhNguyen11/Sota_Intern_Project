@@ -10,12 +10,12 @@ import { Expose, Transform } from 'class-transformer';
 export class SignUpUserDto {
   @Expose()
   @IsString()
-  @Transform(({ value }) => value.trim())
+  // @Transform(({ value }) => value.trim())
   name: string;
 
   @Expose()
   @IsString()
-  @Transform(({ value }) => value.trim())
+  // @Transform(({ value }) => value.trim())
   address: string;
 
   @Expose()

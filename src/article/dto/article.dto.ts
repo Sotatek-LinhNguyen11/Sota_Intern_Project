@@ -1,11 +1,7 @@
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { Expose, Transform } from 'class-transformer';
-enum ArticleGenre {
-  'comic',
-  'story',
-  'novel',
-  'literature',
-}
+import { ArticleGenre } from '../entity/article.entity';
+
 export class ArticleDto {
   @Expose()
   @IsNotEmpty()
