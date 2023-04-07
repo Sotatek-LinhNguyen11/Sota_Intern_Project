@@ -1,30 +1,32 @@
 import { UserEntity } from 'src/user/entity/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-enum ArticleGenre {
-  'comic',
-  'story',
-  'novel',
-  'literature',
+export enum ArticleGenre {
+  'comic' = 'comic',
+  'story' = 'story',
+  'novel' = 'novel',
+  'literature' = 'literature',
 }
 @Entity({
   name: 'article',
 })
 export class ArticleEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
+  @Column({
+    nullable: true,
+  })
   title: string;
 
   @Column({
     type: 'enum',
     enum: ArticleGenre,
-    default: 'literature',
-    nullable: false,
+    default: ArticleGenre.literature,
+    nullable: true,
   })
   topic: ArticleGenre;
 
-  @Column({ nullable: false })
+  @Column({nullable: true})
   content: string;
 
   @ManyToOne(() => UserEntity, (user) => user.articles)

@@ -23,10 +23,10 @@ export class UserEntity {
   @Column()
   age: number;
 
-  @Column()
+  @Column({ nullable: true })
   interest: string;
 
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @OneToMany(() => ArticleEntity, (article) => article.user)

@@ -10,13 +10,8 @@ export class ArticleRepository {
     @InjectRepository(ArticleEntity)
     private readonly repository: Repository<ArticleEntity>,
   ) {}
-  async createArticle(article: ArticleDto): Promise<ArticleEntity> {
-    const saveArticle = await this.repository.create({
-      title: article.title,
-      topic: article.topic,
-      content: article.content,
-    });
-    return await this.repository.save(saveArticle);
+  async createArticle(article: ArticleDto, id: number): Promise<ArticleEntity> {
+    return await this.repository.save({ ...article, user: { id } });
   }
   async getArticlesByName(title: string): Promise<ArticleEntity[]> {
     return await this.repository.find({
@@ -26,6 +21,14 @@ export class ArticleRepository {
     });
   }
 
+  async getArticleById(id: number): Promise<ArticleEntity> {
+    return await this.repository.findOne({
+      relations: ['user'],
+      where: {
+        id: id,
+      },
+    });
+  }
   async updateArticle(
     id: number,
     updateData: Partial<ArticleDto>,
@@ -35,26 +38,8 @@ export class ArticleRepository {
     return await this.repository.save(article);
   }
 
-  async findOneByIdAndAuthorId(
-    id: number,
-    authorid: number,
-  ): Promise<ArticleEntity> {
-    return this.repository.findOne({
-      where: { id, id: { id: authorid } },
-    });
-  }
-
-  async save(article: Article): Promise<Article> {
-    return this.articleRepository.save(article);
-  }
-
-  async delete(id: number, authorId: number): Promise<void> {
-    const result = await this.articleRepository.delete({
-      id,
-      author: { id: authorId },
-    });
-    if (result.affected === 0) {
-      throw new NotFoundException(`Article with ID ${id} not found`);
-    }
+  async deleteArticle(id: number): Promise<string> {
+    await this.repository.delete(id);
+    return 'Delete success!';
   }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entity/user.entity';
 import { Repository } from 'typeorm';
+import { SignUpUserDto } from '../dto/signup.dto';
 import { UserDto } from '../dto/user.dto';
 
 @Injectable()
@@ -11,7 +12,7 @@ export class UserRepository {
     private readonly repository: Repository<UserEntity>,
   ) {}
 
-  async registerUser(user: Partial<UserDto>): Promise<UserEntity> {
+  async registerUser(user: SignUpUserDto): Promise<UserEntity> {
     console.log(user);
     const saveUser = await this.repository.create({
       name: user.name,
@@ -23,11 +24,11 @@ export class UserRepository {
     return await this.repository.save(saveUser);
   }
 
-  async getUser(user: Partial<UserDto>): Promise<UserEntity[]> {
+  async getUser(username: string, password: string): Promise<UserEntity[]> {
     return await this.repository.find({
       where: {
-        username: user.username,
-        password: user.password,
+        username: username,
+        password: password,
       },
     });
   }
@@ -47,5 +48,13 @@ export class UserRepository {
     const user = await this.repository.findOneById(id);
     Object.assign(user, updateData);
     return await this.repository.save(user);
+  }
+
+  async getUserByUsername(name: string): Promise<UserEntity> {
+    return await this.repository.findOne({
+      where: {
+        username: name,
+      },
+    });
   }
 }
