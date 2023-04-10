@@ -12,6 +12,12 @@ export class UserRepository {
     private readonly repository: Repository<UserEntity>,
   ) {}
 
+  async findAll(limit: number, skip: number): Promise<UserEntity[]> {
+    return await this.repository.find({
+      take: limit,
+      skip: skip,
+    });
+  }
   async registerUser(user: SignUpUserDto): Promise<UserEntity> {
     console.log(user);
     const saveUser = await this.repository.create({

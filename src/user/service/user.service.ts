@@ -9,6 +9,11 @@ import { UserDto } from '../dto/user.dto';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
+  async findAll(page = 1, limit = 10): Promise<UserDto[]> {
+    const skip = (page - 1) * limit;
+    const usersEntity = await this.userRepository.findAll(limit, skip);
+    return this.mapEntitiesToDtos(usersEntity);
+  }
   async signUpUser(registerUserDto: SignUpUserDto): Promise<UserEntity> {
     try {
       const user = await this.getUserByUsername(registerUserDto.username);
@@ -19,18 +24,15 @@ export class UserService {
     }
   }
 
-  // async signInUser(signInUserDto: Partial<UserDto>) {
-  //   try {
-  //     const user = await this.userRepository.getUser(signInUserDto);
-  //     if (user != null) {
-  //       console.log('Sign in successfully!', user);
-  //     } else {
-  //       console.log('User account has not registered!');
-  //     }
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
+  mapEntityToDto(user: UserEntity): UserDto {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, password, ...userdto } = user;
+    return userdto;
+  }
+
+  mapEntitiesToDtos(users: UserEntity[]): UserDto[] {
+    return users.map((user) => this.mapEntityToDto(user));
+  }
 
   async getUsersByName(name: string): Promise<UserDto[]> {
     try {

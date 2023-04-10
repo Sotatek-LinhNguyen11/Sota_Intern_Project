@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -17,12 +18,23 @@ import { ArticleService } from '../service/article.service';
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
+  @Get('/lists')
+  async findAll(@Query('page') page = 1, @Query('limit') limit = 10) {
+    const articles = await this.articleService.findAll(page, limit);
+    console.log(articles);
+
+    return {
+      data: articles,
+      page: Number(page),
+      limit: Number(limit),
+    };
+  }
   @UseGuards(AuthGuard)
-  @Post('/create')
+  @Post('')
   async createArticle(@Body() article: ArticleDto, @Request() req: any) {
     await this.articleService.createArticle(article, req.user.id);
   }
-  @Get('/get')
+  @Get('')
   async getArticlesByName(
     @Param('title') title: string,
   ): Promise<ArticleDto[]> {
@@ -30,7 +42,7 @@ export class ArticleController {
   }
 
   @UseGuards(AuthGuard)
-  @Put('/update/:id')
+  @Put('/:id')
   async updateArticle(
     @Param('id') id: string,
     @Request() req: any,
@@ -44,7 +56,7 @@ export class ArticleController {
   }
 
   @UseGuards(AuthGuard)
-  @Delete('/delete/:id')
+  @Delete('/:id')
   async deleteArticle(@Param('id') id: string, @Request() req: any) {
     await this.articleService.deleteArticle(parseInt(id, 10), req.user.id);
   }
