@@ -2,13 +2,36 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ArticleRepository } from '../repository/article.repository';
 import { ArticleDto } from '../dto/article.dto';
 import { plainToInstance } from 'class-transformer';
+import { ArticleEntity } from '../entity/article.entity';
 
 @Injectable()
 export class ArticleService {
   constructor(private readonly articleRepository: ArticleRepository) {}
+  async findAll(page = 1, limit = 10): Promise<ArticleDto[]> {
+    try {
+      const skip = (page - 1) * limit;
+      const articlesEntity = await this.articleRepository.findAll(limit, skip);
+      return this.mapEntitiesToDtos(articlesEntity);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  mapEntityToDto(article: ArticleEntity): ArticleDto {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...articleDto } = article;
+    return articleDto;
+  }
+
+  mapEntitiesToDtos(articles: ArticleEntity[]): ArticleDto[] {
+    return articles.map((article) => this.mapEntityToDto(article));
+  }
   async createArticle(_article: ArticleDto, id: number) {
     try {
-      const saveArticle = await this.articleRepository.createArticle(_article, id);
+      const saveArticle = await this.articleRepository.createArticle(
+        _article,
+        id,
+      );
       console.log('Save successfully!', saveArticle);
     } catch (error) {
       throw error;

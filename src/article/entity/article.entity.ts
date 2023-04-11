@@ -26,7 +26,7 @@ export class ArticleEntity {
   })
   topic: ArticleGenre;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   content: string;
 
   @ManyToOne(() => UserEntity, (user) => user.articles)

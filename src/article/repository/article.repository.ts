@@ -10,6 +10,12 @@ export class ArticleRepository {
     @InjectRepository(ArticleEntity)
     private readonly repository: Repository<ArticleEntity>,
   ) {}
+  async findAll(limit: number, skip: number): Promise<ArticleEntity[]> {
+    return await this.repository.find({
+      take: limit,
+      skip: skip,
+    });
+  }
   async createArticle(article: ArticleDto, id: number): Promise<ArticleEntity> {
     return await this.repository.save({ ...article, user: { id } });
   }
